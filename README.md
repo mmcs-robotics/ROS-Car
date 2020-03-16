@@ -28,12 +28,20 @@ cd <sketchbook>/libraries
 rosrun rosserial_arduino make_libraries.py .
 ```
 
+### Если проблемы с правами на COM порт
+
+В Ubuntu COM-порты защищены групповой политикой и доступны пользователю root и группе `dialout`. Добавим себя в эту группу (чтобы добавление в группу заработало, необходимо перелогиниться текущим пользователем).
+```
+sudo usermod -a -G dialout <USERNAME>
+```
 
 ### Если используем виртуалку
 
-Для работы с Arduino нужно пробросить USB в виртуалку. Для этого необходим [Oracle VM VirtualBox Extension Pack](https://www.virtualbox.org/wiki/Downloads).
-После его установки можно будет включить контроллеры USB 2.0 или 3.0 в `Настройки (машины)/USB/Включить контроллер USB`.
+#### Донастраиваем [VirtualBox](https://www.virtualbox.org/)
+Если при запуске ошибка с hyper visor, а для него уже всё установлено, в том числе в BIOS, то необходимо выполнить в консоли Windows от имени администратора `bcdedit /set hypervisorlaunchtype off` и перезагрузить компьютер. (Если вдруг вы работаете с Docker, то для его работы нужно будет выставлять параметр в `auto`. К сожалению, на Windows нельзя одновременно работать с Docker и VirtualBox).
 
+Для работы с Arduino нужно пробросить USB в виртуалку. Для этого необходим [Oracle VM VirtualBox Extension Pack](https://www.virtualbox.org/wiki/Downloads).
+После его установки можно будет включить контроллеры USB 2.0 или 3.0. в `Настройки (машины)/USB/Включить контроллер USB`.
 
 ## Что тут есть?
 
