@@ -54,3 +54,12 @@ sudo su
 source devel/setup.bash
 rosrun ros_car drive_keyboard.py
 ```
+### `scripts/ros_car_android.cpp`
+
+Нода для управления машинкой наклонами телефона.
+
+```bash
+rosrun ros_car ros_car_node
+```
+
+для работы необходимо скачать [приложение](https://play.google.com/store/apps/details?id=org.ros.android.sensors_driver&hl=ru), и [подключить](https://wiki.ros.org/android_sensors_driver/Tutorials/Connecting%20to%20a%20ROS%20Master) его к ros

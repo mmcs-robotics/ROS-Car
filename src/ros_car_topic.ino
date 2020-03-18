@@ -8,6 +8,7 @@
 #include <ros.h>
 // TODO: add custom msg
 #include <std_msgs/ColorRGBA.h>
+#include <math.h>
 
 #define LEFT_FORWARD 13
 #define LEFT_BACK 12
@@ -22,19 +23,33 @@ IPAddress server(192, 168, 1, 1); // SET IP OF COMPUTER WITH ROSSERVER
 // Set the rosserial socket server port
 const uint16_t serverPort = 11411;
 
-void drive(const int linear, const int radian) {
+int cut_speed(int speed)
+{
+  if(speed > 255)
+    return 255;
+  if(speed < -255)
+    return -255;
+  return speed;
+}
+
+void drive(const float linear, const float radian) {
   Serial.print("Linear speed: ");
   Serial.println(linear);
   Serial.print("Radian speed: ");
   Serial.println(radian);
-  int left_weel = linear - radian;
-  int right_weel = linear + radian;
+  float left_weel = linear - radian;
+  float right_weel = linear + radian;
   // Use pwm to slow down, else car move very fast
-  int pwm = 240;
-  analogWrite(LEFT_FORWARD, left_weel > 0 ? pwm : 0);
-  analogWrite(LEFT_BACK, left_weel < 0 ? pwm : 0);
-  analogWrite(RIGHT_FORWARD, right_weel > 0 ? pwm : 0);
-  analogWrite(RIGHT_BACK, right_weel < 0 ? pwm : 0);
+  int left_pwm = cut_speed(round(left_weel * 255));
+  int right_pwm = cut_speed(round(right_weel * 255));
+  Serial.print("Left speed: ");
+  Serial.println(left_pwm);
+  Serial.print("Right speed: ");
+  Serial.println(right_pwm);
+  analogWrite(LEFT_FORWARD, left_pwm > 0 ? left_pwm : 0);
+  analogWrite(LEFT_BACK, left_pwm < 0 ? -left_pwm : 0);
+  analogWrite(RIGHT_FORWARD, right_pwm > 0 ? right_pwm : 0);
+  analogWrite(RIGHT_BACK, right_pwm < 0 ? -right_pwm : 0);
 }
 
 // Callback for processing msg from drive topic
